@@ -12,4 +12,10 @@ describe Oystercard do
     it "should raise an error if the limit is exeeded" do
         expect{subject.top_up(91)}.to raise_error "the limit is £90"
     end
+    it "should check id deduct method is invoked" do
+        subject.top_up(10)
+        subject.deduct(3)
+        expect(subject.balance).to eq 7
+    end
+
 end
