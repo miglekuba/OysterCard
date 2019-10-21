@@ -17,5 +17,10 @@ describe Oystercard do
         subject.deduct(3)
         expect(subject.balance).to eq 7
     end
+    it "should not allow to go below 0" do
+        subject.top_up(10)
+        expect{subject.deduct(11)}.to raise_error "the balance is below 0"
+    end
+
 
 end

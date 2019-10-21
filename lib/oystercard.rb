@@ -8,4 +8,8 @@ class Oystercard
         raise "the limit is £#{LIMIT}" if user_input > LIMIT
         @balance += user_input
     end
+    def deduct (user_input)
+        raise "the balance is below 0" if user_input > @balance 
+        @balance -= user_input
+    end
 end 
