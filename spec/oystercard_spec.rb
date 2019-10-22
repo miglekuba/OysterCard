@@ -25,4 +25,8 @@ describe Oystercard do
     subject.touch_in
     expect(subject.in_journey).to eq true
    end
+   it "should let you touch out" do
+    subject.touch_out
+    expect(subject.in_journey).to eq false
+   end
 end
