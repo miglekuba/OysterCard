@@ -22,11 +22,26 @@ describe Oystercard do
         expect{subject.deduct(11)}.to raise_error "the balance is below 0"
     end
    it "should let you touch in" do
-    subject.touch_in
+    subject.top_up(20)
+    subject.touch_in('station')
     expect(subject.in_journey).to eq true
    end
    it "should let you touch out" do
     subject.touch_out
     expect(subject.in_journey).to eq false
    end
+   it "should raise an error if a card with insufficient balance is touched in" do
+   expect{subject.touch_in('station')}.to raise_error "insufficient balance!"
+    end
+    it "should charge minimum fare on touch out" do
+        subject.top_up(20)
+        subject.touch_in('station')
+    expect{subject.touch_out}.to change{subject.balance}.by(-1)
+    end
+    it "should remember the entry station of the current journey" do
+        subject.top_up(20)
+        subject.touch_in("Oxford Circus")
+    expect(subject.entry_station).to eq "Oxford Circus"
+    end
+
 end
