@@ -2,6 +2,7 @@ require "oystercard"
 
 describe Oystercard do
     subject {Oystercard.new}
+    let(:station) {double :station}
     it "should be 0 balance by default" do
         expect(subject.balance).to eq 0 
     end
@@ -27,7 +28,9 @@ describe Oystercard do
     expect(subject.in_journey).to eq true
    end
    it "should let you touch out" do
-    subject.touch_out
+    subject.top_up(20)
+    subject.touch_in(station)
+    subject.touch_out(station)              
     expect(subject.in_journey).to eq false
    end
    it "should raise an error if a card with insufficient balance is touched in" do
@@ -36,12 +39,22 @@ describe Oystercard do
     it "should charge minimum fare on touch out" do
         subject.top_up(20)
         subject.touch_in('station')
-    expect{subject.touch_out}.to change{subject.balance}.by(-1)
+    expect{subject.touch_out(station)}.to change{subject.balance}.by(-1)
     end
     it "should remember the entry station of the current journey" do
         subject.top_up(20)
         subject.touch_in("Oxford Circus")
     expect(subject.entry_station).to eq "Oxford Circus"
+    end
+    it "should check if the list of journeys is empty by default" do
+     expect(subject.journey_list).to be_empty 
+    end
+    it "should create a new journey when touching in and out" do
+        subject.top_up(20)
+        subject.touch_in("Kings Cross")
+        subject.touch_out("Oxford Circus")
+    expect(subject.journey_list.length).to eq 1
+    
     end
 
 end
